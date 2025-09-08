@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 from google import genai
+import sys
 
 def main():
     load_dotenv()
@@ -8,9 +9,15 @@ def main():
 
     client = genai.Client(api_key=api_key)
 
+    if len(sys.argv)<2:
+        print("Provide a prompt argument")
+        sys.exit(1)
+    prompt = sys.argv[1]
+        
+
     response = client.models.generate_content (
         model = "gemini-2.0-flash-001",
-        contents = """What is your context size, explain"""
+        contents = prompt
     )
     print(response.text)
 
@@ -21,3 +28,5 @@ def main():
 
 if __name__=="__main__":
     main()
+
+#uv run main.py "What one word is most equivalent to llm context, reply in one word"
