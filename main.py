@@ -13,8 +13,11 @@ def main():
     if len(sys.argv)<2:
         print("Provide a prompt argument")
         sys.exit(1)
-    prompt = sys.argv[1]
-        
+
+    verbose_flag = False
+    if len(sys.argv) == 3 and sys.argv[2] == "--verbose":
+        verbose_flag = True
+    prompt = sys.argv[1]        
     messages = [
         types.Content(role="user", parts=[types.Part(text=prompt)])
     ]
@@ -26,8 +29,11 @@ def main():
 
     if response is None or response.usage_metadata is None:
         print("Response is malformed")
-    print(f"Prompt token count:{response.usage_metadata.prompt_token_count}")
-    print(f"Response token count: {response.usage_metadata.candidates_token_count}")
+        return
+    if verbose_flag:
+        print(f"Prompt: {prompt}")
+        print(f"Prompt token count:{response.usage_metadata.prompt_token_count}")
+        print(f"Response token count: {response.usage_metadata.candidates_token_count}")
 
 if __name__=="__main__":
     main()
